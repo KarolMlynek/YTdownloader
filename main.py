@@ -1,14 +1,14 @@
 from pytube import YouTube
-from sys import argv
 
-link = argv[1]
-yt = YouTube(link)
+def Download(link):
+    youtubeObject = YouTube(link)
+    youtubeObject = youtubeObject.streams.get_highest_resolution()
+    try:
+        youtubeObject.download()
+    except:
+        print("An error has occurred")
+    print("Download is completed successfully")
 
-print("Title: ", yt.title)
 
-print("View: ", yt.views)
-
-yd = yt.streams.get_highest_resolution()
-
-
-yd.download('./YTfolder')
+link = input("Enter the YouTube video URL: ")
+Download(link)
