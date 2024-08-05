@@ -75,26 +75,59 @@ class Audio(tk.Frame):
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Page 1", font = LARGEFONT)
-        label.place(relx=0.5, y=50, anchor="center")
-        button1 = ttk.Button(self, text="StartPage", command=lambda: controller.show_frame(StartPage))
-        button1.grid(row=1, column=1, padx=10, pady=10)
+        link = ttk.Label(self, text="Link: ")
+        link_entry = tk.Entry(self,width=35)
+        listbox_label = ttk.Label(self, text="Choose audio quality")
+        listbox = tk.Listbox(self, selectmode=tk.SINGLE)
+
+        button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
+        link.place(relx=0.10, y=50, anchor="center")
+        link_entry.place(relx=0.40, y=50, anchor="center")
+        button_back.place(relx=0.3, y=450, anchor="center")
+        button_submit.place(relx=0.6, y=450, anchor="center")
+        listbox_label.place(relx=0.20, y=130, anchor="center")
+        listbox.place(relx=0.20, y=300, anchor="center")
 
 
 
 class Video(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text ="Page 2", font=LARGEFONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
+        link = ttk.Label(self, text="Link: ")
+        link_entry = tk.Entry(self, width=35)
+        listbox_label = ttk.Label(self, text="Choose  video quality")
+        listbox = tk.Listbox(self, selectmode=tk.SINGLE)
 
-        button2 = ttk.Button(self, text ="Back", command= lambda: controller.show_frame(StartPage))
-        button2.grid(row=2, column=1, padx=10, pady=10)
+        button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
+        link.place(relx=0.10, y=50, anchor="center")
+        link_entry.place(relx=0.40, y=50, anchor="center")
+        button_back.place(relx=0.3, y=450, anchor="center")
+        button_submit.place(relx=0.6, y=450, anchor="center")
+        listbox_label.place(relx=0.20, y=130, anchor="center")
+        listbox.place(relx=0.20, y=300, anchor="center")
 
 class AV(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        pass
+        link = ttk.Label(self, text="Link: ")
+        link_entry = tk.Entry(self, width=35)
+        listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
+        listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE)
+        listbox_label_video = ttk.Label(self, text="Choose video quality")
+        listbox_video = tk.Listbox(self, selectmode=tk.SINGLE)
+
+        button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
+        link.place(relx=0.10, y=50, anchor="center")
+        link_entry.place(relx=0.40, y=50, anchor="center")
+        button_back.place(relx=0.3, y=450, anchor="center")
+        button_submit.place(relx=0.6, y=450, anchor="center")
+        listbox_label_audio.place(relx=0.20, y=130, anchor="center")
+        listbox_audio.place(relx=0.20, y=300, anchor="center")
+        listbox_label_video.place(relx=0.80, y=130, anchor="center")
+        listbox_video.place(relx=0.80, y=300, anchor="center")
 
 
 
