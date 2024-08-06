@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-
+from downloader import Downloader
 LARGEFONT = ("Verdana", 35)
 
 
@@ -78,7 +78,7 @@ class Audio(tk.Frame):
         link = ttk.Label(self, text="Link: ")
         link_entry = tk.Entry(self,width=35)
         listbox_label = ttk.Label(self, text="Choose audio quality")
-        listbox = tk.Listbox(self, selectmode=tk.SINGLE)
+        listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
 
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
@@ -87,9 +87,13 @@ class Audio(tk.Frame):
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         listbox_label.place(relx=0.20, y=130, anchor="center")
-        listbox.place(relx=0.20, y=300, anchor="center")
+        listbox.place(relx=0.50, y=300, anchor="center")
 
-
+    def add_item(self):
+        item = self.entry.get()
+        if item:
+            self.listbox.insert(tk.END, item)
+            self.entry.delete(0, tk.END)
 
 class Video(tk.Frame):
     def __init__(self, parent, controller):
@@ -97,7 +101,7 @@ class Video(tk.Frame):
         link = ttk.Label(self, text="Link: ")
         link_entry = tk.Entry(self, width=35)
         listbox_label = ttk.Label(self, text="Choose  video quality")
-        listbox = tk.Listbox(self, selectmode=tk.SINGLE)
+        listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
 
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
@@ -106,7 +110,7 @@ class Video(tk.Frame):
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         listbox_label.place(relx=0.20, y=130, anchor="center")
-        listbox.place(relx=0.20, y=300, anchor="center")
+        listbox.place(relx=0.50, y=300, anchor="center")
 
 class AV(tk.Frame):
     def __init__(self, parent, controller):
@@ -131,6 +135,6 @@ class AV(tk.Frame):
 
 
 
-app = TkinterApp()
+'''app = TkinterApp()
 app.geometry("615x500")
-app.mainloop()
+app.mainloop()'''

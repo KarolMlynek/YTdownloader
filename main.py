@@ -1,19 +1,10 @@
 from pytube import YouTube
 from tkinter import Tk
+from gui import *
 
-
-root = Tk()
+root = TkinterApp()
 root.title("YTDownloader")
-root.geometry("800x600")
-def Download(link):
-    youtubeObject = YouTube(link)
-    youtubeObject = youtubeObject.streams.get_highest_resolution()
-    try:
-        youtubeObject.download()
-    except:
-        print("An error has occurred")
-    print("Download is completed successfully")
-
+root.geometry("615x500")
+root.minsize(615, 500)
+root.maxsize(615, 500)
 root.mainloop()
-link = input("Enter the YouTube video URL: ")
-Download(link)
