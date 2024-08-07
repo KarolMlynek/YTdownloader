@@ -2,6 +2,9 @@ from pytube import YouTube
 
 class Downloader:
 
+    def __init__(self, link):
+        self.link = link
+
     def Download(link):
         youtubeObject = YouTube(link)
         youtubeObject = youtubeObject.streams.get_highest_resolution()
@@ -33,15 +36,15 @@ class Downloader:
         audio_dict = {}
         yt = YouTube(link)
         for stream in yt.streams.filter(only_audio=True, adaptive=True):
-            audio_dict[stream.itag] = stream.abr
+            audio_dict[stream.itag] = stream.abr, stream.subtype
         return audio_dict
 
     def create_video_dict(self, link):
         video_dict = {}
         yt = YouTube(link)
-        for stream in yt.streams.filter(only_audio=True, adaptive=True):
-           video_dict[stream.itag] = stream.res
+        for stream in yt.streams.filter(only_video=True, adaptive=True):
+            video_dict[stream.itag] = stream.resolution, stream.subtype
         return video_dict
-downloader = Downloader()
-video_link = "https://www.youtube.com/watch?v=gndkFhYh5Mo"
-downloader.create_audio_dict(video_link)
+#downloader = Downloader()
+#video_link = "https://www.youtube.com/watch?v=gndkFhYh5Mo"
+#downloader.create_audio_dict(video_link)
