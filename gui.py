@@ -100,15 +100,14 @@ class Audio(tk.Frame):
             self.listbox.insert(tk.END, audio_dict[key])
     def select_option(self, audio_dict):
         try:
-            selected_index = self.listbox.curselection()[0]  # Get the index of the selected item
-            selected_option = self.listbox.get(selected_index)  # Get the selected item
+            selected_index = self.listbox.curselection()[0]
+            selected_option = self.listbox.get(selected_index)
             for key in audio_dict:
                 if audio_dict[key] == selected_option:
                     itag = key
 
             return itag
         except IndexError:
-            # Handle the case where no item is selected
             messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
 
 class Video(tk.Frame):
@@ -139,8 +138,8 @@ class Video(tk.Frame):
 
     def select_option(self, video_dict):
         try:
-            selected_index = self.listbox.curselection()[0]  # Get the index of the selected item
-            selected_option = self.listbox.get(selected_index)  # Get the selected item
+            selected_index = self.listbox.curselection()[0]
+            selected_option = self.listbox.get(selected_index)
             for key in video_dict:
                 if video_dict[key] == selected_option:
                     itag = key
@@ -155,16 +154,13 @@ class AV(tk.Frame):
         link_entry = tk.Entry(self, width=35)
         downloader = Downloader(link_entry)
         listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
-        self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE)
+        self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
         listbox_label_video = ttk.Label(self, text="Choose video quality")
-        self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE)
+        self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_link_submit = ttk.Button(self, text="Submit", command=lambda: self.add_items(downloader.create_video_dict(link_entry.get()),
                                                                                             downloader.create_audio_dict(link_entry.get())))
-        button_submit = ttk.Button(self, text="Submit", command=lambda: downloader.get_video(link_entry.get(),
-                                                                        self.select_video_option(downloader.create_video_dict(link_entry.get())))
-                                                                        and downloader.get_video(link_entry.get(),
-                                                                        self.select_audio_option(downloader.create_audio_dict(link_entry.get()))))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: self.download_audio_and_video(downloader, link_entry))
 
         link.place(relx=0.10, y=50, anchor="center")
         link_entry.place(relx=0.40, y=50, anchor="center")
@@ -182,24 +178,45 @@ class AV(tk.Frame):
         for key in audio_dict:
             self.listbox_audio.insert(tk.END, audio_dict[key])
 
-    def select_video_option(self, video_dict):
-        try:
-            selected_index = self.listbox_audio.curselection()[0]  # Get the index of the selected item
-            selected_option = self.listbox_audio.get(selected_index)  # Get the selected item
-            for key in video_dict:
-                if video_dict[key] == selected_option:
-                    itag = key
-            return itag
-        except IndexError:
-            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
-
     def select_audio_option(self, audio_dict):
         try:
-            selected_index = self.listbox_video.curselection()[0]  # Get the index of the selected item
-            selected_option = self.listbox_video.get(selected_index)  # Get the selected item
+            selected_index = self.listbox_audio.curselection()[0]
+            selected_option = self.listbox_audio.get(selected_index)
+            itag = None
             for key in audio_dict:
                 if audio_dict[key] == selected_option:
                     itag = key
-            return itag
+            if itag is not None:
+                return itag
+            else:
+                raise ValueError("Selected option not found in audio_dict")
         except IndexError:
-            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
+            messagebox.showwarning("Selection Error", "No option selected in the audio list. Please select an option.")
+        except ValueError as ve:
+            messagebox.showerror("Selection Error", str(ve))
+
+    def select_video_option(self, video_dict):
+        try:
+            selected_index = self.listbox_video.curselection()[0]
+            selected_option = self.listbox_video.get(selected_index)
+            itag = None
+            for key in video_dict:
+                if video_dict[key] == selected_option:
+                    itag = key
+            if itag is not None:
+                return itag
+            else:
+                raise ValueError("Selected option not found in video_dict")
+        except IndexError:
+            messagebox.showwarning("Selection Error", "No option selected in the video list. Please select an option.")
+        except ValueError as ve:
+            messagebox.showerror("Selection Error", str(ve))
+
+    def download_audio_and_video(self, downloader, link_entry):
+        video_itag = self.select_video_option(downloader.create_video_dict(link_entry.get()))
+        audio_itag = self.select_audio_option(downloader.create_audio_dict(link_entry.get()))
+
+        if video_itag:
+            downloader.get_video(link_entry.get(), video_itag)
+        if audio_itag:
+            downloader.get_audio(link_entry.get(), audio_itag)
