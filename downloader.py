@@ -24,14 +24,18 @@ class Downloader:
         stream.download()
         sound.download()
     def check_itag(link):
-        yt= YouTube(link)
+        yt = YouTube(link)
         print(yt.streams.filter(adaptive=True))
     #link = input("Enter the YouTube video URL: ")
     #check_quality(link)
     def get_audio(self, link, choosen_itag):
-        pass
+        yt = YouTube(link)
+        sound = yt.streams.get_by_itag(choosen_itag)
+        sound.download()
     def get_video(self, link, choosen_itag):
-        pass
+        yt = YouTube(link)
+        stream = yt.streams.get_by_itag(choosen_itag)
+        stream.download()
     def create_audio_dict(self, link):
         audio_dict = {}
         yt = YouTube(link)
@@ -45,6 +49,3 @@ class Downloader:
         for stream in yt.streams.filter(only_video=True, adaptive=True):
             video_dict[stream.itag] = stream.resolution, stream.subtype
         return video_dict
-#downloader = Downloader()
-#video_link = "https://www.youtube.com/watch?v=gndkFhYh5Mo"
-#downloader.create_audio_dict(video_link)

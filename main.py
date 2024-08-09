@@ -1,5 +1,3 @@
-from pytube import YouTube
-from tkinter import Tk
 from gui import *
 
 root = TkinterApp()

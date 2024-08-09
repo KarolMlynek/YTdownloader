@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from downloader import Downloader
 LARGEFONT = ("Verdana", 35)
 
@@ -82,7 +82,8 @@ class Audio(tk.Frame):
         downloader = Downloader(link_entry)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_submit = ttk.Button(self, text="Submit",
-                                   command=lambda: self.add_item(downloader.create_audio_dict(link_entry.get())))
+                                   command=lambda: downloader.get_audio(link_entry.get(),
+                                                                        self.select_option(downloader.create_audio_dict(link_entry.get()))))
         button_link_submit = ttk.Button(self, text="search",
                                         command=lambda: self.add_item(downloader.create_audio_dict(link_entry.get())))
 
@@ -97,6 +98,18 @@ class Audio(tk.Frame):
     def add_item(self, audio_dict):
         for key in audio_dict:
             self.listbox.insert(tk.END, audio_dict[key])
+    def select_option(self, audio_dict):
+        try:
+            selected_index = self.listbox.curselection()[0]  # Get the index of the selected item
+            selected_option = self.listbox.get(selected_index)  # Get the selected item
+            for key in audio_dict:
+                if audio_dict[key] == selected_option:
+                    itag = key
+
+            return itag
+        except IndexError:
+            # Handle the case where no item is selected
+            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
 
 class Video(tk.Frame):
     def __init__(self, parent, controller):
@@ -107,7 +120,8 @@ class Video(tk.Frame):
         self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
         downloader = Downloader(link_entry)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
+        button_submit = ttk.Button(self, text="Submit", command=lambda: downloader.get_video(link_entry.get(),
+                                                                        self.select_option(downloader.create_video_dict(link_entry.get()))))
         button_link_submit = ttk.Button(self, text="search",
                                         command=lambda: self.add_item(downloader.create_video_dict(link_entry.get())))
 
@@ -123,30 +137,69 @@ class Video(tk.Frame):
         for key in video_dict:
             self.listbox.insert(tk.END, video_dict[key])
 
+    def select_option(self, video_dict):
+        try:
+            selected_index = self.listbox.curselection()[0]  # Get the index of the selected item
+            selected_option = self.listbox.get(selected_index)  # Get the selected item
+            for key in video_dict:
+                if video_dict[key] == selected_option:
+                    itag = key
+            return itag
+        except IndexError:
+            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
+
 class AV(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         link = ttk.Label(self, text="Link: ")
         link_entry = tk.Entry(self, width=35)
-        listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
-        listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE)
-        listbox_label_video = ttk.Label(self, text="Choose video quality")
-        listbox_video = tk.Listbox(self, selectmode=tk.SINGLE)
         downloader = Downloader(link_entry)
-
+        listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
+        self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE)
+        listbox_label_video = ttk.Label(self, text="Choose video quality")
+        self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button_submit = ttk.Button(self, text="Submit", command=lambda: controller.show_frame())
+        button_link_submit = ttk.Button(self, text="Submit", command=lambda: self.add_items(downloader.create_video_dict(link_entry.get()),
+                                                                                            downloader.create_audio_dict(link_entry.get())))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: downloader.get_video(link_entry.get(),
+                                                                        self.select_video_option(downloader.create_video_dict(link_entry.get())))
+                                                                        and downloader.get_video(link_entry.get(),
+                                                                        self.select_audio_option(downloader.create_audio_dict(link_entry.get()))))
+
         link.place(relx=0.10, y=50, anchor="center")
         link_entry.place(relx=0.40, y=50, anchor="center")
         button_back.place(relx=0.3, y=450, anchor="center")
+        button_link_submit.place(relx=0.7, y=50, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         listbox_label_audio.place(relx=0.20, y=130, anchor="center")
-        listbox_audio.place(relx=0.20, y=300, anchor="center")
+        self.listbox_audio.place(relx=0.20, y=300, anchor="center")
         listbox_label_video.place(relx=0.80, y=130, anchor="center")
-        listbox_video.place(relx=0.80, y=300, anchor="center")
+        self.listbox_video.place(relx=0.80, y=300, anchor="center")
 
+    def add_items(self, video_dict, audio_dict):
+        for key in video_dict:
+            self.listbox_video.insert(tk.END, video_dict[key])
+        for key in audio_dict:
+            self.listbox_audio.insert(tk.END, audio_dict[key])
 
+    def select_video_option(self, video_dict):
+        try:
+            selected_index = self.listbox_audio.curselection()[0]  # Get the index of the selected item
+            selected_option = self.listbox_audio.get(selected_index)  # Get the selected item
+            for key in video_dict:
+                if video_dict[key] == selected_option:
+                    itag = key
+            return itag
+        except IndexError:
+            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
 
-'''app = TkinterApp()
-app.geometry("615x500")
-app.mainloop()'''
+    def select_audio_option(self, audio_dict):
+        try:
+            selected_index = self.listbox_video.curselection()[0]  # Get the index of the selected item
+            selected_option = self.listbox_video.get(selected_index)  # Get the selected item
+            for key in audio_dict:
+                if audio_dict[key] == selected_option:
+                    itag = key
+            return itag
+        except IndexError:
+            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
