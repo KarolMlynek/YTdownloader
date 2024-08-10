@@ -8,11 +8,11 @@ class Downloader:
     def get_audio(self, link, choosen_itag):
         yt = YouTube(link)
         sound = yt.streams.get_by_itag(choosen_itag)
-        sound.download()
+        sound.download(filename_prefix='Audio_')
     def get_video(self, link, choosen_itag):
         yt = YouTube(link)
         stream = yt.streams.get_by_itag(choosen_itag)
-        stream.download()
+        stream.download(filename_prefix='Video_')
     def create_audio_dict(self, link):
         audio_dict = {}
         yt = YouTube(link)
