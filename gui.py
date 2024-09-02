@@ -1,8 +1,10 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from downloader import Downloader
-LARGEFONT = ("Verdana", 35)
+from os import path
 
+LARGEFONT = ("Verdana", 35)
+default_path = path.expanduser("~/Downloads")
 
 class TkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -12,7 +14,6 @@ class TkinterApp(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
         self.frames = {}
 
         for F in (StartPage, Audio, Video, AV):
@@ -24,6 +25,12 @@ class TkinterApp(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+
+    def browse_folder(self, folder_entry):
+        folder_selected = filedialog.askdirectory()
+        if folder_selected:
+            folder_entry.delete(0, tk.END)
+            folder_entry.insert(0, folder_selected)
 
 
 class StartPage(tk.Frame):
@@ -65,10 +72,12 @@ class StartPage(tk.Frame):
     def retrieve_state(self, check_var, check_var1):
         if check_var.get() == 1 and check_var1.get() == 0:
             self.controller.show_frame(Audio)
-        if check_var.get() == 1 and check_var1.get() == 1:
+        elif check_var.get() == 1 and check_var1.get() == 1:
             self.controller.show_frame(AV)
-        if check_var.get() == 0 and check_var1.get() == 1:
+        elif check_var.get() == 0 and check_var1.get() == 1:
             self.controller.show_frame(Video)
+        else:
+            messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
 
 class Audio(tk.Frame):
 
@@ -77,18 +86,25 @@ class Audio(tk.Frame):
         tk.Frame.__init__(self, parent)
         link = ttk.Label(self, text="Link: ")
         link_entry = ttk.Entry(self,width=35)
+        folder = ttk.Label(self, text="Folder: ")
+        folder_entry = ttk.Entry(self, width=35)
+        folder_entry.insert(0, default_path)
         listbox_label = ttk.Label(self, text="Choose audio quality")
         self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
         downloader = Downloader(link_entry)
+        button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_submit = ttk.Button(self, text="Submit",
-                                   command=lambda: downloader.get_audio(link_entry.get(),
+                                   command=lambda: downloader.get_audio(folder_entry.get(), link_entry.get(),
                                                                         self.select_option(downloader.create_audio_dict(link_entry.get()))))
         button_link_submit = ttk.Button(self, text="search",
                                         command=lambda: self.add_item(downloader.create_audio_dict(link_entry.get())))
 
         link.place(relx=0.10, y=50, anchor="center")
         link_entry.place(relx=0.40, y=50, anchor="center")
+        folder.place(relx=0.1, y=80, anchor="center")
+        folder_entry.place(relx=0.4, y=80, anchor="center")
+        button_folder.place(relx=0.7, y=80, anchor="center")
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         button_link_submit.place(relx=0.7, y=50, anchor="center")
@@ -105,7 +121,6 @@ class Audio(tk.Frame):
             for key in audio_dict:
                 if audio_dict[key] == selected_option:
                     itag = key
-
             return itag
         except IndexError:
             messagebox.showwarning("Selection Error", "No option selected. Please select an option.")
@@ -115,17 +130,24 @@ class Video(tk.Frame):
         tk.Frame.__init__(self, parent)
         link = ttk.Label(self, text="Link: ")
         link_entry = tk.Entry(self, width=35)
-        listbox_label = ttk.Label(self, text="Choose  video quality")
+        folder = ttk.Label(self, text="Folder: ")
+        folder_entry = ttk.Entry(self, width=35)
+        folder_entry.insert(0, default_path)
+        listbox_label = ttk.Label(self, text="Choose  video resolution")
         self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
         downloader = Downloader(link_entry)
+        button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button_submit = ttk.Button(self, text="Submit", command=lambda: downloader.get_video(link_entry.get(),
+        button_submit = ttk.Button(self, text="Submit", command=lambda: downloader.get_video(folder_entry.get(), link_entry.get(),
                                                                         self.select_option(downloader.create_video_dict(link_entry.get()))))
         button_link_submit = ttk.Button(self, text="search",
                                         command=lambda: self.add_item(downloader.create_video_dict(link_entry.get())))
 
         link.place(relx=0.10, y=50, anchor="center")
         link_entry.place(relx=0.40, y=50, anchor="center")
+        folder.place(relx=0.1, y=80, anchor="center")
+        folder_entry.place(relx=0.4, y=80, anchor="center")
+        button_folder.place(relx=0.7, y=80, anchor="center")
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         listbox_label.place(relx=0.20, y=130, anchor="center")
@@ -152,18 +174,25 @@ class AV(tk.Frame):
         tk.Frame.__init__(self, parent)
         link = ttk.Label(self, text="Link: ")
         link_entry = tk.Entry(self, width=35)
+        folder = ttk.Label(self, text="Folder: ")
+        folder_entry = ttk.Entry(self, width=35)
+        folder_entry.insert(0, default_path)
         downloader = Downloader(link_entry)
+        button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
         self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
-        listbox_label_video = ttk.Label(self, text="Choose video quality")
+        listbox_label_video = ttk.Label(self, text="Choose video resolution")
         self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button_link_submit = ttk.Button(self, text="Submit", command=lambda: self.add_items(downloader.create_video_dict(link_entry.get()),
                                                                                             downloader.create_audio_dict(link_entry.get())))
-        button_submit = ttk.Button(self, text="Submit", command=lambda: self.download_audio_and_video(downloader, link_entry))
+        button_submit = ttk.Button(self, text="Submit", command=lambda: self.download_audio_and_video(downloader, link_entry, folder_entry.get()))
 
         link.place(relx=0.10, y=50, anchor="center")
         link_entry.place(relx=0.40, y=50, anchor="center")
+        folder.place(relx=0.1, y=80, anchor="center")
+        folder_entry.place(relx=0.4, y=80, anchor="center")
+        button_folder.place(relx=0.7, y=80, anchor="center")
         button_back.place(relx=0.3, y=450, anchor="center")
         button_link_submit.place(relx=0.7, y=50, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
@@ -212,11 +241,11 @@ class AV(tk.Frame):
         except ValueError as ve:
             messagebox.showerror("Selection Error", str(ve))
 
-    def download_audio_and_video(self, downloader, link_entry):
+    def download_audio_and_video(self, downloader, link_entry, folder_path):
         video_itag = self.select_video_option(downloader.create_video_dict(link_entry.get()))
         audio_itag = self.select_audio_option(downloader.create_audio_dict(link_entry.get()))
 
         if video_itag:
-            downloader.get_video(link_entry.get(), video_itag)
+            downloader.get_video(folder_path, link_entry.get(), video_itag)
         if audio_itag:
-            downloader.get_audio(link_entry.get(), audio_itag)
+            downloader.get_audio(folder_path , link_entry.get(), audio_itag)

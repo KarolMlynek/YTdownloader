@@ -5,14 +5,14 @@ class Downloader:
     def __init__(self, link):
         self.link = link
 
-    def get_audio(self, link, choosen_itag):
+    def get_audio(self, folder_path, link, choosen_itag):
         yt = YouTube(link)
         sound = yt.streams.get_by_itag(choosen_itag)
-        sound.download(filename_prefix='Audio_')
-    def get_video(self, link, choosen_itag):
+        sound.download(output_path= folder_path, filename_prefix='Audio_')
+    def get_video(self, folder_path, link, choosen_itag):
         yt = YouTube(link)
         stream = yt.streams.get_by_itag(choosen_itag)
-        stream.download(filename_prefix='Video_')
+        stream.download(output_path=folder_path, filename_prefix='Video_')
     def create_audio_dict(self, link):
         audio_dict = {}
         yt = YouTube(link)
