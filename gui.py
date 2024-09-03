@@ -90,7 +90,7 @@ class Audio(tk.Frame):
         folder_entry = ttk.Entry(self, width=35)
         folder_entry.insert(0, default_path)
         listbox_label = ttk.Label(self, text="Choose audio quality")
-        self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
+        self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=80, height=14)
         downloader = Downloader(link_entry)
         button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
@@ -108,8 +108,8 @@ class Audio(tk.Frame):
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
         button_link_submit.place(relx=0.7, y=50, anchor="center")
-        listbox_label.place(relx=0.20, y=130, anchor="center")
-        self.listbox.place(relx=0.50, y=300, anchor="center")
+        listbox_label.place(relx=0.20, y=140, anchor="center")
+        self.listbox.place(relx=0.47, y=280, anchor="center")
 
     def add_item(self, audio_dict):
         for key in audio_dict:
@@ -134,7 +134,7 @@ class Video(tk.Frame):
         folder_entry = ttk.Entry(self, width=35)
         folder_entry.insert(0, default_path)
         listbox_label = ttk.Label(self, text="Choose  video resolution")
-        self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=60)
+        self.listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=80, height=14)
         downloader = Downloader(link_entry)
         button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
@@ -150,9 +150,9 @@ class Video(tk.Frame):
         button_folder.place(relx=0.7, y=80, anchor="center")
         button_back.place(relx=0.3, y=450, anchor="center")
         button_submit.place(relx=0.6, y=450, anchor="center")
-        listbox_label.place(relx=0.20, y=130, anchor="center")
+        listbox_label.place(relx=0.20, y=140, anchor="center")
         button_link_submit.place(relx=0.70, y=50, anchor="center")
-        self.listbox.place(relx=0.50, y=300, anchor="center")
+        self.listbox.place(relx=0.47, y=280, anchor="center")
 
     def add_item(self, video_dict):
         for key in video_dict:
@@ -180,11 +180,11 @@ class AV(tk.Frame):
         downloader = Downloader(link_entry)
         button_folder = ttk.Button(self, text="Choose", command=lambda: controller.browse_folder(folder_entry))
         listbox_label_audio = ttk.Label(self, text="Choose  audio quality")
-        self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
+        self.listbox_audio = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False, width=40)
         listbox_label_video = ttk.Label(self, text="Choose video resolution")
-        self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False)
+        self.listbox_video = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=False, width=40)
         button_back = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button_link_submit = ttk.Button(self, text="Submit", command=lambda: self.add_items(downloader.create_video_dict(link_entry.get()),
+        button_link_submit = ttk.Button(self, text="Search", command=lambda: self.add_items(downloader.create_video_dict(link_entry.get()),
                                                                                             downloader.create_audio_dict(link_entry.get())))
         button_submit = ttk.Button(self, text="Submit", command=lambda: self.download_audio_and_video(downloader, link_entry, folder_entry.get()))
 
@@ -193,13 +193,13 @@ class AV(tk.Frame):
         folder.place(relx=0.1, y=80, anchor="center")
         folder_entry.place(relx=0.4, y=80, anchor="center")
         button_folder.place(relx=0.7, y=80, anchor="center")
-        button_back.place(relx=0.3, y=450, anchor="center")
+        button_back.place(relx=0.35, y=450, anchor="center")
         button_link_submit.place(relx=0.7, y=50, anchor="center")
-        button_submit.place(relx=0.6, y=450, anchor="center")
-        listbox_label_audio.place(relx=0.20, y=130, anchor="center")
-        self.listbox_audio.place(relx=0.20, y=300, anchor="center")
-        listbox_label_video.place(relx=0.80, y=130, anchor="center")
-        self.listbox_video.place(relx=0.80, y=300, anchor="center")
+        button_submit.place(relx=0.65, y=450, anchor="center")
+        listbox_label_audio.place(relx=0.25, y=180, anchor="center")
+        self.listbox_audio.place(relx=0.25, y=280, anchor="center")
+        listbox_label_video.place(relx=0.75, y=180, anchor="center")
+        self.listbox_video.place(relx=0.75, y=280, anchor="center")
 
     def add_items(self, video_dict, audio_dict):
         for key in video_dict:
