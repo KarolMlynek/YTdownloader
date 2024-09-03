@@ -28,7 +28,9 @@ YTDownloader is a simple and user-friendly desktop application that enables you 
 
 ## Screenshots
 
-![YTDownloader GUI](screenshots/YTDownloader_GUI.png)
+![YTDownloader GUI](screenshots/YTDownloader_GUIstart.png)
+![YTDownloader GUI](screenshots/YTDownloader_GUIaudio.png)
+![YTDownloader GUI](screenshots/YTDownloader_GUIav.png)
 
 ## Requirements
 
